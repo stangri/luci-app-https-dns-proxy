@@ -18,7 +18,10 @@ var pkg = {
 	},
 	get URL() {
 		return (
-			"https://docs.openwrt.melmac.net/" + pkg.Name + "/" + pkg.ReadmeCompat
+			"https://docs.openwrt.melmac.net/" +
+			pkg.Name +
+			"/" +
+			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "")
 		);
 	},
 	templateToRegexp: function (template) {

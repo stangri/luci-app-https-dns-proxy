@@ -10,7 +10,7 @@
 			"regex": "(familyshield.|)",
 			"options": [
 				{
-					"value": "family.",
+					"value": "familyshield.",
 					"description": "Family Filter"
 				},
 				{
