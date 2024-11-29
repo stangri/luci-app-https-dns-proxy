@@ -29,7 +29,7 @@ return view.extend({
 				http2_support: null,
 				http3_support: null,
 			},
-			providers: (data[1] && data[1][pkg.Name]) || { providers: [] },
+			providers: (data[1] && data[1][pkg.Name]) || [{ title: "empty" }],
 		};
 		reply.providers.sort(function (a, b) {
 			return _(a.title).localeCompare(_(b.title));
