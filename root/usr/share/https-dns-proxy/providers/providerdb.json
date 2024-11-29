@@ -1,0 +1,693 @@
+{ "version": 20241129, 
+	"https-dns-proxy":[
+	{
+		"title": "Tiarap Public DNS (JP)",
+		"template": "https://doh.{option}/dns-query",
+		"bootstrap_dns": "172.104.93.80,2400:8902::f03c:91ff:feda:c514",
+		"help_link": "https://tiarap.org/",
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(tiar.app|tiarap.org)",
+				"options": [
+					{
+						"value": "tiar.app",
+						"description": "Direct"
+					},
+					{
+						"value": "tiarap.org",
+						"description": "Cloudflare Cached"
+					}
+				],
+				"default": "tiar.app"
+			}
+		}
+	},
+	{
+		"title": "CIRA Canadian Shield",
+		"template": "https://{option}.canadianshield.cira.ca/dns-query",
+		"bootstrap_dns": "149.112.121.30,149.112.122.30,2620:10A:80BB::30,2620:10A:80BC::30",
+		"help_link": "https://www.cira.ca/cybersecurity-services/canadian-shield/",
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(family|private|protected)",
+				"options": [
+					{
+						"value": "family",
+						"description": "Family Filter"
+					},
+					{
+						"value": "private",
+						"description": "Private Filter"
+					},
+					{
+						"value": "Protected",
+						"description": "Protected Filter"
+					}
+				],
+				"default": "private"
+			}
+		}
+	},
+	{
+		"title": "Digitale Gesellschaft (CH)",
+		"template": "https://dns.digitale-gesellschaft.ch/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"http2_only": true,
+		"help_link": "https://www.digitale-gesellschaft.ch/dns/"
+	},
+	{
+		"title": "Switch DNS (CH)",
+		"template": "https://dns.switch.ch/dns-query",
+		"bootstrap_dns": "130.59.31.248,2001:620:0:ff::2",
+		"help_link": "https://www.switch.ch/security/info/public-dns/"
+	},
+	{
+		"title": "DoH 360 DNS (CN)",
+		"template": "https://doh.360.cn/dns-query",
+		"bootstrap_dns": "101.226.4.6,218.30.118.6,123.125.81.6,140.207.198.6"
+	},
+	{
+		"title": "RubyFish (CN)",
+		"template": "https://dns.rubyfish.cn/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"http2_only": true
+	},
+	{
+		"title": "OSZX DNS (UK)",
+		"template": "https://doh.{option}/dns-query",
+		"bootstrap_dns": "51.38.82.198,2001:41d0:801:2000::1b28",
+		"help_link": "https://dns.oszx.co/#mdoh",
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(oszx.co|pumplex.com)",
+				"options": [
+					{
+						"value": "oszx.co",
+						"description": "AdBlocking Filter"
+					},
+					{
+						"value": "pumplex.com",
+						"description": "Standard"
+					}
+				],
+				"default": "oszx.co"
+			}
+		}
+	},
+	{
+		"title": "AdGuard",
+		"template": "https://{option}.adguard-dns.com/dns-query",
+		"bootstrap_dns": "94.140.14.140,94.140.14.141",
+		"help_link": "https://adguard-dns.io/en/public-dns.html",
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(dns|unfiltered|family)",
+				"options": [
+					{
+						"value": "dns",
+						"description": "Default (Blocks ads and trackers)"
+					},
+					{
+						"value": "unfiltered",
+						"description": "Unfiltered"
+					},
+					{
+						"value": "family",
+						"description": "Family Filter"
+					}
+				],
+				"default": "dns"
+			}
+		}
+	},
+	{
+		"title": "AhaDNS Blitz",
+		"template": "https://blitz.ahadns.com/{option}",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://blitz-setup.ahadns.com/",
+		"params": {
+			"option": {
+				"description": "Filters",
+				"type": "text",
+				"default": ""
+			}
+		}
+	},
+	{
+		"title": "AliDNS",
+		"template": "https://dns.alidns.com/dns-query",
+		"bootstrap_dns": "223.5.5.5,223.6.6.6,2400:3200::1,2400:3200:baba::1"
+	},
+	{
+		"title": "BlahDNS",
+		"template": "https://doh-{option}.blahdns.com/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://blahdns.com/",
+		"params": {
+			"option": {
+				"description": "Location",
+				"type": "select",
+				"regex": "(ch|de|fi|jp|sg)",
+				"options": [
+					{
+						"value": "ch",
+						"description": "Switzerland"
+					},
+					{
+						"value": "de",
+						"description": "Germany"
+					},
+					{
+						"value": "fi",
+						"description": "Finland"
+					},
+					{
+						"value": "jp",
+						"description": "Japan"
+					},
+					{
+						"value": "sg",
+						"description": "Singapore"
+					}
+				],
+				"default": "ch"
+			}
+		}
+	},
+	{
+		"title": "Cloudflare",
+		"template": "https://{option}cloudflare-dns.com/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001",
+		"help_link": "https://one.one.one.one/",
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(family.||security.)",
+				"options": [
+					{
+						"value": "family.",
+						"description": "Family Filter"
+					},
+					{
+						"value": "",
+						"description": "Standard"
+					},
+					{
+						"value": "security.",
+						"description": "Security Filter"
+					}
+				],
+				"default": ""
+			}
+		}
+	},
+	{
+		"title": "ControlD",
+		"template": "https://freedns.controld.com/{option}",
+		"bootstrap_dns": "76.76.2.0,2606:1a40::0",
+		"help_link": "https://kb.controld.com/tutorials",
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(family|p0|p1|p2|p3)",
+				"options": [
+					{
+						"value": "family",
+						"description": "Family Filter"
+					},
+					{
+						"value": "p0",
+						"description": "Standard"
+					},
+					{
+						"value": "p1",
+						"description": "Malware Filter"
+					},
+					{
+						"value": "p2",
+						"description": "Ads + Malware Filter"
+					},
+					{
+						"value": "p3",
+						"description": "Ads + Malware + Social Filter"
+					}
+				],
+				"default": "p0"
+			}
+		}
+	},
+	{
+		"title": "DeCloudUs DNS",
+		"template": "https://dns.decloudus.com/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://decloudus.com/"
+	},
+	{
+		"title": "DNS For Family",
+		"template": "https://dns-doh.dnsforfamily.com/dns-query",
+		"bootstrap_dns": "94.130.180.225,78.47.64.161",
+		"help_link": "https://dnsforfamily.com/#DNS_Servers_DNS_Over_HTTPS"
+	},
+	{
+		"title": "DNSlify DNS",
+		"template": "https://doh.dnslify.com/dns-query",
+		"bootstrap_dns": "185.235.81.1,185.235.81.2,2a0d:4d00:81::1,2a0d:4d00:81::2",
+		"help_link": "https://www.dnslify.com/services/doh/"
+	},
+	{
+		"title": "OpenDNS",
+		"template": "https://doh.{option}opendns.com/dns-query",
+		"bootstrap_dns": "208.67.222.222,208.67.220.220",
+		"help_link": "https://support.opendns.com/hc/en-us/articles/360038086532-Using-DNS-over-HTTPS-DoH-with-OpenDNS",
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(familyshield.|)",
+				"options": [
+					{
+						"value": "familyshield.",
+						"description": "Family Filter"
+					},
+					{
+						"value": "",
+						"description": "Standard"
+					}
+				],
+				"default": ""
+			}
+		}
+	},
+	{
+		"title": "Rethink DNS",
+		"template": "https://sky.rethinkdns.com/{option}",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://www.rethinkdns.com/configure",
+		"params": {
+			"option": {
+				"description": "Filters",
+				"type": "text",
+				"default": ""
+			}
+		}
+	},
+	{
+		"title": "ODVR (CZ)",
+		"template": "https://odvr.nic.cz/doh",
+		"bootstrap_dns": "193.17.47.1,185.43.135.1"
+	},
+	{
+		"title": "DNS Forge (DE)",
+		"template": "https://dnsforge.de/dns-query",
+		"bootstrap_dns": "176.9.93.198,176.9.1.117,2a01:4f8:151:34aa::198,2a01:4f8:141:316d::117",
+		"help_link": "https://dnsforge.de/"
+	},
+	{
+		"title": "Lelux DNS (FI)",
+		"template": "https://resolver-eu.lelux.fi/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://lelux.fi/resolver/"
+	},
+	{
+		"title": "Google",
+		"template": "https://dns.google/dns-query",
+		"bootstrap_dns": "8.8.8.8,8.8.4.4",
+		"default": true
+	},
+	{
+		"title": "LibreDNS (GR)",
+		"template": "https://doh.libredns.gr/{option}",
+		"bootstrap_dns": "116.202.176.26",
+		"help_link": "https://libredns.gr/",
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(ads|dns-query)",
+				"options": [
+					{
+						"value": "ads",
+						"description": "AdBlocking Filter"
+					},
+					{
+						"value": "dns-query",
+						"description": "Standard"
+					}
+				],
+				"default": "dns-query"
+			}
+		}
+	},
+	{
+		"title": "NextDNS.io",
+		"template": "https://dns.nextdns.io/{option}",
+		"bootstrap_dns": "45.90.28.49,45.90.30.49",
+		"help_link": "https://my.nextdns.io",
+		"params": {
+			"option": {
+				"description": "Username",
+				"type": "text",
+				"default": ""
+			}
+		}
+	},
+	{
+		"title": "Seby DNS (AU)",
+		"template": "https://doh-2.seby.io/dns-query",
+		"bootstrap_dns": "45.76.113.31,139.99.222.72",
+		"help_link": "https://dns.seby.io/"
+	},
+	{
+		"title": "IIJ Public DNS (JP)",
+		"template": "https://public.dns.iij.jp/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://www.iij.ad.jp/"
+	},
+	{
+		"title": "Restena DNS (LU)",
+		"template": "https://kaitain.restena.lu/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://www.restena.lu/en/service/public-dns-resolver",
+		"http2_only": true
+	},
+	{
+		"title": "AhaDNS Regional",
+		"template": "https://doh.{option}.ahadns.net/dns-query",
+		"bootstrap_dns": "185.213.26.187,45.67.219.208,5.2.75.75,45.79.120.233,2a0d:5600:33:3::3,2a04:bdc7:100:70::70,2a04:52c0:101:75::75,2400:8904:e001:43::43",
+		"help_link": "https://ahadns.com/dns-over-https/",
+		"params": {
+			"option": {
+				"description": "Location",
+				"type": "select",
+				"regex": "(au|chi|es|in|it|la|nl|no|ny|pl)",
+				"options": [
+					{
+						"value": "au",
+						"description": "Australia"
+					},
+					{
+						"value": "chi",
+						"description": "US/Chicago"
+					},
+					{
+						"value": "es",
+						"description": "Spain"
+					},
+					{
+						"value": "in",
+						"description": "India"
+					},
+					{
+						"value": "it",
+						"description": "Italy"
+					},
+					{
+						"value": "la",
+						"description": "US/Los Angeles"
+					},
+					{
+						"value": "nl",
+						"description": "Netherlands"
+					},
+					{
+						"value": "no",
+						"description": "Norway"
+					},
+					{
+						"value": "ny",
+						"description": "US/New York"
+					},
+					{
+						"value": "pl",
+						"description": "Poland"
+					}
+				],
+				"default": "chi"
+			}
+		}
+	},
+	{
+		"title": "Applied Privacy DNS (AT)",
+		"template": "https://doh.applied-privacy.net/query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://applied-privacy.net/services/dns/"
+	},
+	{
+		"title": "CFIEC Public IPv6 Only DNS (CN)",
+		"template": "https://dns.cfiec.net/dns-query",
+		"bootstrap_dns": "240C::6666,240C::6644"
+	},
+	{
+		"title": "FFMUC DNS (DE)",
+		"template": "https://doh.ffmuc.net/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://ffmuc.net/wiki/doku.php?id=knb:dohdot"
+	},
+	{
+		"title": "Hurricane Electric",
+		"template": "https://ordns.he.net/dns-query",
+		"bootstrap_dns": "74.82.42.42,2001:470:20::2",
+		"help_link": "https://forums.he.net/index.php?topic=3996.0"
+	},
+	{
+		"title": "IDNet (UK)",
+		"template": "https://doh.idnet.net/dns-query",
+		"bootstrap_dns": "212.69.36.23,212.69.40.23"
+	},
+	{
+		"title": "Mullvad",
+		"template": "https://{option}dns.mullvad.net/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://mullvad.net/en/help/dns-over-https-and-dns-over-tls/",
+		"http2_only": true,
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(|adblock.|base.|extended.|family.|all.)",
+				"options": [
+					{
+						"value": "",
+						"description": "Standard"
+					},
+					{
+						"value": "adblock.",
+						"description": "Ads and Trackers Filter"
+					},
+					{
+						"value": "base.",
+						"description": "Ads, Trackers, and Malware Filter"
+					},
+					{
+						"value": "extended.",
+						"description": "Ads, Trackers, Malware, and Social Media Filter"
+					},
+					{
+						"value": "family.",
+						"description": "Ads, Trackers, Malware, Adult, and Gambling"
+					},
+					{
+						"value": "all.",
+						"description": "Ads, Trackers, Malware, Adult, Gambling, and Social Media Filter"
+					}
+				],
+				"default": ""
+			}
+		}
+	},
+	{
+		"title": "Mullvad",
+		"template": "https://{option}doh.mullvad.net/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://mullvad.net/en/help/dns-over-https-and-dns-over-tls/",
+		"http2_only": true,
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(adblock.|)",
+				"options": [
+					{
+						"value": "adblock.",
+						"description": "AdBlocking Filter"
+					},
+					{
+						"value": "",
+						"description": "Standard"
+					}
+				],
+				"default": ""
+			}
+		}
+	},
+	{
+		"title": "Mullvad Regional",
+		"template": "https://{option}.mullvad.net/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://mullvad.net/en/help/dns-over-https-and-dns-over-tls/",
+		"http2_only": true,
+		"params": {
+			"option": {
+				"description": "Region",
+				"type": "select",
+				"regex": "(de-fra-dns-001|gb-lon-dns-001|gb-lon-dns-301|se-got-dns-001|se-mma-dns-001|se-sto-dns-001|sg-sin-dns-101|us-dal-dns-001|us-nyc-dns-601)",
+				"options": [
+					{
+						"value": "de-fra-dns-001",
+						"description": "Frankfurt, Germany"
+					},
+					{
+						"value": "gb-lon-dns-001",
+						"description": "London, United Kingdom (1)"
+					},
+					{
+						"value": "gb-lon-dns-301",
+						"description": "London, United Kingdom (2)"
+					},
+					{
+						"value": "se-got-dns-001",
+						"description": "Gothenburg, Sweden"
+					},
+					{
+						"value": "se-mma-dns-001",
+						"description": "Malmö, Sweden"
+					},
+					{
+						"value": "se-sto-dns-001",
+						"description": "Stockholm, Sweden"
+					},
+					{
+						"value": "sg-sin-dns-101",
+						"description": "Singapore"
+					},
+					{
+						"value": "us-dal-dns-001",
+						"description": "Dallas, United States"
+					},
+					{
+						"value": "us-nyc-dns-601",
+						"description": "New York City, United States"
+					}
+				],
+				"default": "us-nyc-dns-601"
+			}
+		}
+	},
+	{
+		"title": "Quad 9",
+		"template": "https://{option}.quad9.net/dns-query",
+		"bootstrap_dns": "9.9.9.9,149.112.112.112,2620:fe::fe,2620:fe::9",
+		"help_link": "https://www.quad9.net/doh-quad9-dns-servers/",
+		"params": {
+			"option": {
+				"description": "Variant",
+				"type": "select",
+				"regex": "(dns|dns9|dns10|dns11)",
+				"options": [
+					{
+						"value": "dns",
+						"description": "Standard"
+					},
+					{
+						"value": "dns9",
+						"description": "Secured"
+					},
+					{
+						"value": "dns10",
+						"description": "Unsecured"
+					},
+					{
+						"value": "dns11",
+						"description": "Secured with ECS Support"
+					}
+				],
+				"default": "dns"
+			}
+		}
+	},
+	{
+		"title": "Comss DNS (RU)",
+		"template": "https://dns.{option}comss.one/dns-query",
+		"bootstrap_dns": "92.38.152.163,93.115.24.204,2a03:90c0:56::1a5,2a02:7b40:5eb0:e95d::1",
+		"params": {
+			"option": {
+				"description": "Location",
+				"type": "select",
+				"regex": "(east.|)",
+				"options": [
+					{
+						"value": "east.",
+						"description": "Siberia"
+					},
+					{
+						"value": "",
+						"description": "Moscow, St Petersburg"
+					}
+				],
+				"default": ""
+			}
+		}
+	},
+	{
+		"title": "CleanBrowsing",
+		"template": "https://doh.cleanbrowsing.org/doh/{option}-filter/",
+		"bootstrap_dns": "185.228.168.168",
+		"help_link": "https://cleanbrowsing.org/guides/dnsoverhttps",
+		"params": {
+			"option": {
+				"description": "Filter",
+				"type": "select",
+				"regex": "(adult|family|security)",
+				"options": [
+					{
+						"value": "adult",
+						"description": "Adult Content Filter"
+					},
+					{
+						"value": "family",
+						"description": "Family Filter"
+					},
+					{
+						"value": "security",
+						"description": "Security Filter"
+					}
+				],
+				"default": "security"
+			}
+		}
+	},
+	{
+		"title": "Snopyta DNS (FI)",
+		"template": "https://fi.doh.dns.snopyta.org/dns-query",
+		"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+		"help_link": "https://snopyta.org/service/dns/"
+	},
+	{
+		"title": "DNSPod Public DNS (CN)",
+		"template": "https://doh.pub/dns-query",
+		"bootstrap_dns": "119.29.29.29,119.28.28.28"
+	},
+	{
+		"title": "DoH DNS (SB)",
+		"template": "https://doh.dns.sb/dns-query",
+		"bootstrap_dns": "185.222.222.222,185.184.222.222",
+		"help_link": "https://dns.sb/doh/",
+		"http2_only": true
+	},
+	{
+		"title": "Quad 101 (TW)",
+		"template": "https://dns.twnic.tw/dns-query",
+		"bootstrap_dns": "101.101.101.101,101.102.103.104,2001:de4::101,2001:de4::102",
+		"help_link": "https://blog.twnic.tw/2018/12/28/1803/"
+	}
+]}

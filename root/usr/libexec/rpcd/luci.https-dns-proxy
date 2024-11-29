@@ -13,6 +13,7 @@
 
 readonly packageName="https-dns-proxy"
 readonly providersDir="/usr/share/${packageName}/providers"
+readonly providersDB="providerdb.json"
 
 . /lib/functions.sh
 . /usr/share/libubox/jshn.sh
@@ -102,14 +103,7 @@ get_platform_support() {
 }
 
 get_providers() {
-	local f
-	echo '{"https-dns-proxy":['
-	for f in "$providersDir"/*; do
-		cat "$f"
-		echo ','
-	done
-#	echo '{ "title": "Custom", "template": "{option}", "params": { "option": { "type": "text", }, }, },'
-	echo ']}'
+	cat "$providersDir"/"$providersDB"
 }
 
 get_runtime() { ubus call service list "{ 'verbose': true, 'name': '$1' }"; }
@@ -141,7 +135,6 @@ case "$1" in
 			json_add_string 'name' 'name'
 		json_close_object
 		json_add_object "getProviders"
-			json_add_string 'name' "name"
 		json_close_object
 		json_add_object "getRuntime"
 			json_add_string 'name' "name"
@@ -181,7 +174,7 @@ case "$1" in
 				json_load "$input"
 				json_get_var name "name"
 				json_cleanup
-				get_providers "$name"
+				get_providers
 				;;
 			getRuntime)
 				read -r input
