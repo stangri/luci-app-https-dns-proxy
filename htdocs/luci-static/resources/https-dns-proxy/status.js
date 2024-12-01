@@ -25,7 +25,7 @@ var pkg = {
 		);
 	},
 	templateToRegexp: function (template) {
-		return RegExp(
+		if(template) return RegExp(
 			"^" +
 				template
 					.split(/(\{\w+\})/g)
@@ -37,9 +37,11 @@ var pkg = {
 					.join("") +
 				"$"
 		);
+		return RegExp();
 	},
 	templateToResolver: function (template, args) {
-		return template.replace(/{(\w+)}/g, (_, v) => args[v]);
+		if(template) return template.replace(/{(\w+)}/g, (_, v) => args[v]);
+		return;
 	},
 };
 
@@ -157,8 +159,8 @@ var status = baseclass.extend({
 					force_dns_active: null,
 					version: null,
 				},
-				providers: (data[1] && data[1][pkg.Name]) || { providers: [] },
-				runtime: (data[2] && data[2][pkg.Name]) || { instances: [] },
+				providers: (data[1] && data[1][pkg.Name]) || [{ title: "empty" }],
+				runtime: (data[2] && data[2][pkg.Name]) || { instances: null, triggers: [] },
 			};
 			reply.providers.sort(function (a, b) {
 				return _(a.title).localeCompare(_(b.title));
