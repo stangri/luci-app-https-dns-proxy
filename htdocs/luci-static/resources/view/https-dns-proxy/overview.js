@@ -329,12 +329,27 @@ return view.extend({
 				};
 				_paramText.remove = _paramText.write;
 			}
+			const _boot_dns = s.option(
+				form.Value,
+				"_bootstrap_dns_" + i,
+				_("Bootstrap DNS")
+			);
+			_boot_dns.modalonly = true;
+			_boot_dns.depends("_provider", prov.template);
+			_boot_dns.cfgvalue = function (section_id) {
+				const c_value = this.map.data.get(
+					this.map.config,
+					section_id,
+					"bootstrap_dns"
+				);
+				console.log(c_value);
+				return c_value || prov.bootstrap_dns || "";
+			};
+			_boot_dns.write = function (section_id, formvalue) {
+				L.uci.set(pkg.Name, section_id, "bootstrap_dns", formvalue);
+			};
+			_boot_dns.remove = _boot_dns.write;
 		});
-
-		o = s.option(form.Value, "bootstrap_dns", _("Bootstrap DNS"));
-		o.default = "";
-		o.modalonly = true;
-		o.optional = true;
 
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
 		o.datatype = "ipaddr('nomask')";
