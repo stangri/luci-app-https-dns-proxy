@@ -334,6 +334,7 @@ return view.extend({
 				"_bootstrap_dns_" + i,
 				_("Bootstrap DNS")
 			);
+			_boot_dns.template = prov.template;
 			_boot_dns.modalonly = true;
 			_boot_dns.depends("_provider", prov.template);
 			_boot_dns.cfgvalue = function (section_id) {
@@ -342,11 +343,34 @@ return view.extend({
 					section_id,
 					"bootstrap_dns"
 				);
-				console.log(c_value);
 				return c_value || prov.bootstrap_dns || "";
 			};
 			_boot_dns.write = function (section_id, formvalue) {
-				L.uci.set(pkg.Name, section_id, "bootstrap_dns", formvalue);
+				const resolver = this.map.data.get(
+					this.map.config,
+					section_id,
+					"resolver_url"
+				);
+				const regex = pkg.templateToRegexp(_boot_dns.template);
+				const match = resolver.match(regex);
+				if (match?.groups) {
+					console.log(
+						pkg.Name,
+						section_id,
+						"bootstrap_dns",
+						formvalue,
+						this.cfgvalue(section_id)
+					);
+					if (formvalue)
+						L.uci.set(pkg.Name, section_id, "bootstrap_dns", formvalue);
+					else
+						L.uci.set(
+							pkg.Name,
+							section_id,
+							"bootstrap_dns",
+							this.cfgvalue(section_id)
+						);
+				}
 			};
 			_boot_dns.remove = _boot_dns.write;
 		});
