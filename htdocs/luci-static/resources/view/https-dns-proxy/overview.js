@@ -351,9 +351,8 @@ return view.extend({
 					section_id,
 					"resolver_url"
 				);
-				const regex = pkg.templateToRegexp(_boot_dns.template);
-				const match = resolver.match(regex);
-				if (match?.groups) {
+				const regexp = pkg.templateToRegexp(_boot_dns.template);
+				if (regexp.test(resolver)) {
 					console.log(
 						pkg.Name,
 						section_id,
@@ -371,8 +370,8 @@ return view.extend({
 							this.cfgvalue(section_id)
 						);
 				}
+				_boot_dns.remove = _boot_dns.write;
 			};
-			_boot_dns.remove = _boot_dns.write;
 		});
 
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
