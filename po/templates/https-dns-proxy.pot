@@ -238,11 +238,11 @@ msgstr ""
 msgid "Force Router DNS server to all local devices"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:432
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:437
 msgid "Force use of HTTP/1"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:444
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:449
 msgid "Force use of IPv6 DNS resolvers"
 msgstr ""
 
@@ -350,11 +350,11 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:411
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:416
 msgid "Logging File Path"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:405
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:410
 msgid "Logging Verbosity"
 msgstr ""
 
@@ -425,7 +425,7 @@ msgstr ""
 msgid "Poland"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:416
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:421
 msgid "Polling Interval"
 msgstr ""
 
@@ -457,7 +457,7 @@ msgstr ""
 msgid "Provider"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:422
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:427
 msgid "Proxy Server"
 msgstr ""
 
@@ -540,6 +540,10 @@ msgstr ""
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/org.snopyta.dns.doh.fi.json:2
 msgid "Snopyta DNS (FI)"
+msgstr ""
+
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:405
+msgid "Source Address"
 msgstr ""
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.ahadns.doh.json:22
@@ -625,19 +629,19 @@ msgstr ""
 msgid "Update select configs"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:427
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:432
 msgid "Use HTTP/1"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:438
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:443
 msgid "Use IPv6 resolvers"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:443
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:448
 msgid "Use any family DNS resolvers"
 msgstr ""
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:431
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:436
 msgid "Use negotiated HTTP version"
 msgstr ""
 

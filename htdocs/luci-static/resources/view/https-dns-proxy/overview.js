@@ -154,9 +154,9 @@ return view.extend({
 				"Blocks access to Mozilla Encrypted resolvers, forcing local devices to use router for DNS resolution (%smore information%s)."
 			).format(
 				'<a href="' +
-					pkg.URL +
-					"#canary_domains_mozilla" +
-					'" target="_blank">',
+				pkg.URL +
+				"#canary_domains_mozilla" +
+				'" target="_blank">',
 				"</a>"
 			)
 		);
@@ -400,6 +400,11 @@ return view.extend({
 		o.datatype = "range(0,63)";
 		o.default = "";
 		o.modalonly = true;
+		o.optional = true;
+
+		o = s.option(form.Value, "source_addr", _("Source Address"));
+		o.datatype = "ipaddr('nomask')";
+		o.default = "";
 		o.optional = true;
 
 		o = s.option(form.Value, "verbosity", _("Logging Verbosity"));
