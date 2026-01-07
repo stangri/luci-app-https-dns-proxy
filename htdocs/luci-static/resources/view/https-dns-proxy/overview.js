@@ -274,19 +274,6 @@ return view.extend({
 						_paramList.value(val, descr);
 					});
 					_paramList.depends("_provider", prov.template);
-					_paramList.write = function (section_id, formvalue) {
-						let template = this.map.data.get(
-							this.map.config,
-							section_id,
-							"resolver_url"
-						);
-						if (!formvalue && _paramList.template !== template) return 0;
-						let resolver = pkg.templateToResolver(_paramList.template, {
-							option: formvalue || "",
-						});
-						L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
-					};
-					_paramList.remove = _paramList.write;
 				} else if (prov.params.option.type === "text") {
 					let optName = prov.params.option.description || _("Parameter");
 					var _paramText = s.option(form.Value, "_paramText_" + i, optName);
@@ -307,19 +294,6 @@ return view.extend({
 						let match = resolver.match(regexp);
 						return (match && match[1]) || null;
 					};
-					_paramText.write = function (section_id, formvalue) {
-						let template = this.map.data.get(
-							this.map.config,
-							section_id,
-							"resolver_url"
-						);
-						if (!formvalue && _paramText.template !== template) return 0;
-						let resolver = pkg.templateToResolver(_paramText.template, {
-							option: formvalue || "",
-						});
-						L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
-					};
-					_paramText.remove = _paramText.write;
 				}
 			}
 		}
@@ -341,18 +315,6 @@ return view.extend({
 				);
 				return c_value || prov.bootstrap_dns || "";
 			};
-			_boot_dns.write = function (section_id, formvalue) {
-				if (formvalue)
-					L.uci.set(pkg.Name, section_id, "bootstrap_dns", formvalue);
-				else
-					L.uci.set(
-						pkg.Name,
-						section_id,
-						"bootstrap_dns",
-						this.cfgvalue(section_id)
-					);
-				_boot_dns.remove = _boot_dns.write;
-			};
 		}
 
 		reply.providers.forEach((prov, i) => {
@@ -362,6 +324,45 @@ return view.extend({
 			createProviderWidget(s, i, prov);
 			createBootstrapWidget(s, i, prov);
 		});
+
+		s.write = function (section_id, formvalues) {
+			let providerTemplate = formvalues["_provider"];
+			let resolverUrl = providerTemplate;
+			let bootstrapDns = "";
+
+			reply.providers.forEach((prov, i) => {
+				if (prov.template === providerTemplate) {
+					let paramValue = "";
+					if (prov.params && prov.params.option) {
+						if (prov.params.option.type === "select") {
+							paramValue = formvalues["_paramList_" + i] || "";
+						} else if (prov.params.option.type === "text") {
+							paramValue = formvalues["_paramText_" + i] || "";
+						}
+					}
+
+					resolverUrl = pkg.templateToResolver(providerTemplate, {
+						option: paramValue
+					});
+
+					bootstrapDns = formvalues["_bootstrap_dns_" + i];
+
+					// Fallback to default if empty
+					if (!bootstrapDns) {
+						bootstrapDns = prov.bootstrap_dns || "";
+					}
+				}
+			});
+
+			if (resolverUrl) {
+				L.uci.set(pkg.Name, section_id, "resolver_url", resolverUrl);
+			}
+
+			if (bootstrapDns) {
+				L.uci.set(pkg.Name, section_id, "bootstrap_dns", bootstrapDns);
+			}
+		};
+
 
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
 		o.datatype = "ipaddr('nomask')";
