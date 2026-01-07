@@ -250,8 +250,63 @@ return view.extend({
 			});
 			return ret || "";
 		};
+
 		_provider.write = function (section_id, formvalue) {
-			L.uci.set(pkg.Name, section_id, "resolver_url", formvalue);
+			let providerTemplate = formvalue;
+			let resolverUrl = providerTemplate;
+			let bootstrapDns = "";
+			let section = this.section;
+
+			reply.providers.forEach((prov, i) => {
+				if (prov.template === providerTemplate) {
+					let paramValue = "";
+					let paramWidgetOption = "";
+
+					if (prov.params && prov.params.option) {
+						if (prov.params.option.type === "select") {
+							paramWidgetOption = "_paramList_" + i;
+						} else if (prov.params.option.type === "text") {
+							paramWidgetOption = "_paramText_" + i;
+						}
+					}
+
+					if (paramWidgetOption) {
+						// Find the widget object to get the value safely
+						let widget = section.children.find(w => w.option === paramWidgetOption);
+						if (widget) {
+							paramValue = widget.formvalue(section_id) || "";
+						}
+					}
+
+					resolverUrl = pkg.templateToResolver(providerTemplate, {
+						option: paramValue
+					});
+
+					let bootWidget = section.children.find(w => w.option === "_bootstrap_dns_" + i);
+					if (bootWidget) {
+						bootstrapDns = bootWidget.formvalue(section_id);
+					}
+
+					// Fallback to default if empty
+					if (!bootstrapDns) {
+						bootstrapDns = prov.bootstrap_dns || "";
+					}
+				}
+			});
+
+			if (resolverUrl) {
+				L.uci.set(pkg.Name, section_id, "resolver_url", resolverUrl);
+			}
+
+			if (bootstrapDns) {
+				L.uci.set(pkg.Name, section_id, "bootstrap_dns", bootstrapDns);
+			} else {
+				L.uci.unset(pkg.Name, section_id, "bootstrap_dns");
+			}
+		};
+		_provider.remove = function (section_id) {
+			L.uci.unset(pkg.Name, section_id, "resolver_url");
+			L.uci.unset(pkg.Name, section_id, "bootstrap_dns");
 		};
 
 		function createProviderWidget(s, i, prov) {
@@ -274,6 +329,8 @@ return view.extend({
 						_paramList.value(val, descr);
 					});
 					_paramList.depends("_provider", prov.template);
+					_paramList.write = function (section_id, formvalue) { };
+					_paramList.remove = function (section_id, formvalue) { };
 				} else if (prov.params.option.type === "text") {
 					let optName = prov.params.option.description || _("Parameter");
 					var _paramText = s.option(form.Value, "_paramText_" + i, optName);
@@ -294,6 +351,8 @@ return view.extend({
 						let match = resolver.match(regexp);
 						return (match && match[1]) || null;
 					};
+					_paramText.write = function (section_id, formvalue) { };
+					_paramText.remove = function (section_id, formvalue) { };
 				}
 			}
 		}
@@ -315,6 +374,8 @@ return view.extend({
 				);
 				return c_value || prov.bootstrap_dns || "";
 			};
+			_boot_dns.write = function (section_id, formvalue) { };
+			_boot_dns.remove = function (section_id, formvalue) { };
 		}
 
 		reply.providers.forEach((prov, i) => {
@@ -324,45 +385,6 @@ return view.extend({
 			createProviderWidget(s, i, prov);
 			createBootstrapWidget(s, i, prov);
 		});
-
-		s.write = function (section_id, formvalues) {
-			let providerTemplate = formvalues["_provider"];
-			let resolverUrl = providerTemplate;
-			let bootstrapDns = "";
-
-			reply.providers.forEach((prov, i) => {
-				if (prov.template === providerTemplate) {
-					let paramValue = "";
-					if (prov.params && prov.params.option) {
-						if (prov.params.option.type === "select") {
-							paramValue = formvalues["_paramList_" + i] || "";
-						} else if (prov.params.option.type === "text") {
-							paramValue = formvalues["_paramText_" + i] || "";
-						}
-					}
-
-					resolverUrl = pkg.templateToResolver(providerTemplate, {
-						option: paramValue
-					});
-
-					bootstrapDns = formvalues["_bootstrap_dns_" + i];
-
-					// Fallback to default if empty
-					if (!bootstrapDns) {
-						bootstrapDns = prov.bootstrap_dns || "";
-					}
-				}
-			});
-
-			if (resolverUrl) {
-				L.uci.set(pkg.Name, section_id, "resolver_url", resolverUrl);
-			}
-
-			if (bootstrapDns) {
-				L.uci.set(pkg.Name, section_id, "bootstrap_dns", bootstrapDns);
-			}
-		};
-
 
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
 		o.datatype = "ipaddr('nomask')";
