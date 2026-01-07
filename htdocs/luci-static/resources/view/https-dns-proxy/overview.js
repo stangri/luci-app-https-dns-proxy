@@ -254,81 +254,77 @@ return view.extend({
 			L.uci.set(pkg.Name, section_id, "resolver_url", formvalue);
 		};
 
-		reply.providers.forEach((prov, i) => {
-			if (prov.http2_only && !reply.platform.http2_support) return;
-			if (prov.http3_only && !reply.platform.http3_support) return;
-			_provider.value(prov.template, _(prov.title));
+		function createProviderWidget(s, i, prov) {
 			if (
 				prov.params &&
 				prov.params.option &&
-				prov.params.option.type &&
-				prov.params.option.type === "select"
+				prov.params.option.type
 			) {
-				let optName = prov.params.option.description || _("Parameter");
-				var _paramList = s.option(form.ListValue, "_paramList_" + i, optName);
-				_paramList.template = prov.template;
-				_paramList.modalonly = true;
-				if (prov.params.option.default) {
-					_paramList.default = prov.params.option.default;
+				if (prov.params.option.type === "select") {
+					let optName = prov.params.option.description || _("Parameter");
+					var _paramList = s.option(form.ListValue, "_paramList_" + i, optName);
+					_paramList.template = prov.template;
+					_paramList.modalonly = true;
+					if (prov.params.option.default) {
+						_paramList.default = prov.params.option.default;
+					}
+					prov.params.option.options.forEach((opt) => {
+						let val = opt.value || "";
+						let descr = opt.description || "";
+						_paramList.value(val, descr);
+					});
+					_paramList.depends("_provider", prov.template);
+					_paramList.write = function (section_id, formvalue) {
+						let template = this.map.data.get(
+							this.map.config,
+							section_id,
+							"resolver_url"
+						);
+						if (!formvalue && _paramList.template !== template) return 0;
+						let resolver = pkg.templateToResolver(_paramList.template, {
+							option: formvalue || "",
+						});
+						L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
+					};
+					_paramList.remove = _paramList.write;
+				} else if (prov.params.option.type === "text") {
+					let optName = prov.params.option.description || _("Parameter");
+					var _paramText = s.option(form.Value, "_paramText_" + i, optName);
+					_paramText.template = prov.template;
+					_paramText.modalonly = true;
+					_paramText.depends("_provider", prov.template);
+					_paramText.optional = !(
+						prov.params.option.default && prov.params.option.default !== ""
+					);
+					_paramText.cfgvalue = function (section_id) {
+						let resolver = this.map.data.get(
+							this.map.config,
+							section_id,
+							"resolver_url"
+						);
+						if (resolver === undefined || resolver === null) return null;
+						let regexp = pkg.templateToRegexp(prov.template);
+						let match = resolver.match(regexp);
+						return (match && match[1]) || null;
+					};
+					_paramText.write = function (section_id, formvalue) {
+						let template = this.map.data.get(
+							this.map.config,
+							section_id,
+							"resolver_url"
+						);
+						if (!formvalue && _paramText.template !== template) return 0;
+						let resolver = pkg.templateToResolver(_paramText.template, {
+							option: formvalue || "",
+						});
+						L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
+					};
+					_paramText.remove = _paramText.write;
 				}
-				prov.params.option.options.forEach((opt) => {
-					let val = opt.value || "";
-					let descr = opt.description || "";
-					_paramList.value(val, descr);
-				});
-				_paramList.depends("_provider", prov.template);
-				_paramList.write = function (section_id, formvalue) {
-					let template = this.map.data.get(
-						this.map.config,
-						section_id,
-						"resolver_url"
-					);
-					if (!formvalue && _paramList.template !== template) return 0;
-					let resolver = pkg.templateToResolver(_paramList.template, {
-						option: formvalue || "",
-					});
-					L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
-				};
-				_paramList.remove = _paramList.write;
-			} else if (
-				prov.params &&
-				prov.params.option &&
-				prov.params.option.type &&
-				prov.params.option.type === "text"
-			) {
-				let optName = prov.params.option.description || _("Parameter");
-				var _paramText = s.option(form.Value, "_paramText_" + i, optName);
-				_paramText.template = prov.template;
-				_paramText.modalonly = true;
-				_paramText.depends("_provider", prov.template);
-				_paramText.optional = !(
-					prov.params.option.default && prov.params.option.default !== ""
-				);
-				_paramText.cfgvalue = function (section_id) {
-					let resolver = this.map.data.get(
-						this.map.config,
-						section_id,
-						"resolver_url"
-					);
-					if (resolver === undefined || resolver === null) return null;
-					let regexp = pkg.templateToRegexp(prov.template);
-					let match = resolver.match(regexp);
-					return (match && match[1]) || null;
-				};
-				_paramText.write = function (section_id, formvalue) {
-					let template = this.map.data.get(
-						this.map.config,
-						section_id,
-						"resolver_url"
-					);
-					if (!formvalue && _paramText.template !== template) return 0;
-					let resolver = pkg.templateToResolver(_paramText.template, {
-						option: formvalue || "",
-					});
-					L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
-				};
-				_paramText.remove = _paramText.write;
 			}
+		}
+
+		function createBootstrapWidget(s, i, prov) {
 			const _boot_dns = s.option(
 				form.Value,
 				"_bootstrap_dns_" + i,
@@ -346,32 +342,25 @@ return view.extend({
 				return c_value || prov.bootstrap_dns || "";
 			};
 			_boot_dns.write = function (section_id, formvalue) {
-				const resolver = this.map.data.get(
-					this.map.config,
-					section_id,
-					"resolver_url"
-				);
-				const regexp = pkg.templateToRegexp(_boot_dns.template);
-				if (regexp.test(resolver)) {
-					console.log(
+				if (formvalue)
+					L.uci.set(pkg.Name, section_id, "bootstrap_dns", formvalue);
+				else
+					L.uci.set(
 						pkg.Name,
 						section_id,
 						"bootstrap_dns",
-						formvalue,
 						this.cfgvalue(section_id)
 					);
-					if (formvalue)
-						L.uci.set(pkg.Name, section_id, "bootstrap_dns", formvalue);
-					else
-						L.uci.set(
-							pkg.Name,
-							section_id,
-							"bootstrap_dns",
-							this.cfgvalue(section_id)
-						);
-				}
 				_boot_dns.remove = _boot_dns.write;
 			};
+		}
+
+		reply.providers.forEach((prov, i) => {
+			if (prov.http2_only && !reply.platform.http2_support) return;
+			if (prov.http3_only && !reply.platform.http3_support) return;
+			_provider.value(prov.template, _(prov.title));
+			createProviderWidget(s, i, prov);
+			createBootstrapWidget(s, i, prov);
 		});
 
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
