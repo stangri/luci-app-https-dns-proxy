@@ -46,8 +46,10 @@ return view.extend({
 		status = new hdp.status();
 
 		m = new form.Map(pkg.Name, _("HTTPS DNS Proxy - Configuration"));
-
 		s = m.section(form.NamedSection, "config", pkg.Name);
+
+		s.tab("service", _("Service Options"));
+		s.tab("global", _("Global Instance Options"));
 
 		var dhcp_dnsmasq_values = Object.values(L.uci.sections("dhcp", "dnsmasq"));
 		function isEmpty(obj) {
@@ -55,7 +57,8 @@ return view.extend({
 		}
 
 		if (!isEmpty(dhcp_dnsmasq_values)) {
-			o = s.option(
+			o = s.taboption(
+				"service",
 				form.ListValue,
 				"dnsmasq_config_update_option",
 				_("Update DNSMASQ Config on Start/Stop"),
@@ -93,7 +96,8 @@ return view.extend({
 				L.uci.set(pkg.Name, section_id, "dnsmasq_config_update", formvalue);
 			};
 
-			o = s.option(
+			o = s.taboption(
+				"service",
 				form.MultiValue,
 				"dnsmasq_config_update",
 				_("Select the DNSMASQ Configs to update")
@@ -115,7 +119,8 @@ return view.extend({
 			o.retain = true;
 		}
 
-		o = s.option(
+		o = s.taboption(
+			"service",
 			form.ListValue,
 			"force_dns",
 			_("Force Router DNS"),
@@ -130,7 +135,8 @@ return view.extend({
 		o.value("1", _("Force Router DNS server to all local devices"));
 		o.default = "1";
 
-		o = s.option(
+		o = s.taboption(
+			"service",
 			form.ListValue,
 			"canary_domains_icloud",
 			_("Canary Domains iCloud"),
@@ -146,7 +152,8 @@ return view.extend({
 		o.depends("force_dns", "1");
 		o.default = "1";
 
-		o = s.option(
+		o = s.taboption(
+			"service",
 			form.ListValue,
 			"canary_domains_mozilla",
 			_("Canary Domains Mozilla"),
@@ -164,6 +171,147 @@ return view.extend({
 		o.value("1", _("Force Router DNS server to all local devices"));
 		o.depends("force_dns", "1");
 		o.default = "1";
+
+		o = s.taboption(
+			"service",
+			form.Value,
+			"heartbeat_domain",
+			_("Heartbeat Domain"),
+			_(
+				"The domain used for connectivity checks (%smore information%s)."
+			).format(
+				'<a href="' + pkg.URL + "#heartbeat_domain" + '" target="_blank">',
+				"</a>"
+			)
+		);
+		o.optional = true;
+		o.placeholder = "heartbeat.melmac.ca";
+
+		o = s.taboption(
+			"service",
+			form.Value,
+			"heartbeat_sleep_timeout",
+			_("Heartbeat Sleep Timeout"),
+			_("Time to wait before checking connectivity (seconds).")
+		);
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "10";
+
+		o = s.taboption(
+			"service",
+			form.Value,
+			"heartbeat_wait_timeout",
+			_("Heartbeat Wait Timeout"),
+			_("Time to wait for connectivity check response (seconds).")
+		);
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "30";
+
+		o = s.taboption("service", form.ListValue, "verbosity", _("Verbosity"));
+		o.optional = true;
+		o.value("0", _("Minimal output/logging"));
+		o.value("1", _("Normal output/logging"));
+		o.value("2", _("Extra output/logging"));
+		o.default = "1";
+
+		o = s.taboption(
+			"global",
+			form.ListValue,
+			"force_http1",
+			_("Use HTTP/1")
+		);
+		o.optional = true;
+		o.rmempty = true;
+		o.value("", _("Use negotiated HTTP version"));
+		o.value("1", _("Force use of HTTP/1"));
+		o.default = "";
+
+		o = s.taboption(
+			"global",
+			form.ListValue,
+			"force_http3",
+			_("Use HTTP/3 (QUIC)")
+		);
+		o.optional = true;
+		o.rmempty = true;
+		o.value("", _("Use negotiated HTTP version"));
+		o.value("1", _("Force use of HTTP/3 (QUIC)"));
+		o.default = "";
+		o.depends("force_http1", "");
+
+		o = s.taboption(
+			"global",
+			form.ListValue,
+			"force_ipv6_resolvers",
+			_("Use IPv6 resolvers")
+		);
+		o.optional = true;
+		o.rmempty = true;
+		o.value("", _("Use any family DNS resolvers"));
+		o.value("1", _("Force use of IPv6 DNS resolvers"));
+		o.default = "";
+
+		o = s.taboption("global", form.Value, "listen_addr", _("Listen Address"));
+		o.datatype = "ipaddr('nomask')";
+		o.optional = true;
+		o.placeholder = "127.0.0.1";
+
+		o = s.taboption("global", form.Value, "user", _("Run As User"));
+		o.optional = true;
+		o.placeholder = "nobody";
+
+		o = s.taboption("global", form.Value, "group", _("Run As Group"));
+		o.optional = true;
+		o.placeholder = "nogroup";
+
+		o = s.taboption("global", form.Value, "source_addr", _("Source Address"));
+		o.datatype = "ipaddr('nomask')";
+		o.optional = true;
+		o.placeholder = "";
+
+		o = s.taboption("global", form.Value, "logfile", _("Logging File Path"));
+		o.datatype = "file";
+		o.optional = true;
+		o.placeholder = "";
+
+		o = s.taboption("global", form.Value, "polling_interval", _("Polling Interval"));
+		o.datatype = "range(5,3600)";
+		o.optional = true;
+		o.placeholder = "120";
+
+		o = s.taboption("global", form.Value, "proxy_server", _("Proxy Server"));
+		o.optional = true;
+
+		o = s.taboption("global", form.Value, "ca_certs_file", _("CA Certs File"));
+		o.datatype = "file";
+		o.optional = true;
+
+		o = s.taboption("global", form.Value, "conn_loss_time", _("Connection Loss Time"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "15";
+
+		o = s.taboption("global", form.Value, "log_limit", _("Log Limit"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "0";
+
+		o = s.taboption("global", form.Value, "max_idle_time", _("Max Idle Time"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "118";
+
+		o = s.taboption("global", form.Value, "statistic_interval", _("Statistic Interval"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "0";
+
+		o = s.taboption("global", form.Value, "tcp_client_limit", _("TCP Client Limit"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "20";
 
 		text = "";
 		if (!reply.platform.http2_support)
@@ -388,58 +536,87 @@ return view.extend({
 
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
 		o.datatype = "ipaddr('nomask')";
-		o.default = "";
 		o.optional = true;
 		o.placeholder = "127.0.0.1";
 
 		o = s.option(form.Value, "listen_port", _("Listen Port"));
 		o.datatype = "port";
-		o.default = "";
 		o.optional = true;
 		o.placeholder = "5053";
 
-		o = s.option(form.Value, "user", _("Run As User"));
-		o.default = "";
-		o.modalonly = true;
+		o = s.option(form.Value, "source_addr", _("Source (Bind To) Address"));
+		o.datatype = "ipaddr('nomask')";
 		o.optional = true;
 
-		o = s.option(form.Value, "group", _("Run As Group"));
-		o.default = "";
+		o = s.option(form.Value, "user", _("Run As User"));
 		o.modalonly = true;
 		o.optional = true;
+		o.placeholder = "nobody";
+
+		o = s.option(form.Value, "group", _("Run As Group"));
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "nogroup";
 
 		o = s.option(form.Value, "dscp_codepoint", _("DSCP Codepoint"));
 		o.datatype = "range(0,63)";
-		o.default = "";
 		o.modalonly = true;
-		o.optional = true;
-
-		o = s.option(form.Value, "source_addr", _("Source Address"));
-		o.datatype = "ipaddr('nomask')";
-		o.default = "";
 		o.optional = true;
 
 		o = s.option(form.Value, "verbosity", _("Logging Verbosity"));
 		o.datatype = "range(0,4)";
-		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+		o.placeholder = "1";
 
 		o = s.option(form.Value, "logfile", _("Logging File Path"));
-		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
 
 		o = s.option(form.Value, "polling_interval", _("Polling Interval"));
 		o.datatype = "range(5,3600)";
-		o.default = "";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "120";
+
+		o = s.option(form.Value, "proxy_server", _("Proxy Server"));
 		o.modalonly = true;
 		o.optional = true;
 
-		o = s.option(form.Value, "proxy_server", _("Proxy Server"));
-		o.default = "";
+		o = s.option(form.Value, "ca_certs_file", _("CA Certs File"));
+		o.datatype = "file";
 		o.modalonly = true;
 		o.optional = true;
+
+		o = s.option(form.Value, "conn_loss_time", _("Connection Loss Time"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "15";
+
+		o = s.option(form.Value, "log_limit", _("Log Limit"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "0";
+
+		o = s.option(form.Value, "max_idle_time", _("Max Idle Time"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "118";
+
+		o = s.option(form.Value, "statistic_interval", _("Statistic Interval"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "0";
+
+		o = s.option(form.Value, "tcp_client_limit", _("TCP Client Limit"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "20";
 
 		o = s.option(form.ListValue, "force_http1", _("Use HTTP/1"));
 		o.modalonly = true;
@@ -449,11 +626,16 @@ return view.extend({
 		o.value("1", _("Force use of HTTP/1"));
 		o.default = "";
 
-		o = s.option(
-			form.ListValue,
-			"force_ipv6_resolvers",
-			_("Use IPv6 resolvers")
-		);
+		o = s.option(form.ListValue, "force_http3", _("Use HTTP/3 (QUIC)"));
+		o.modalonly = true;
+		o.optional = true;
+		o.rmempty = true;
+		o.value("", _("Use negotiated HTTP version"));
+		o.value("1", _("Force use of HTTP/3 (QUIC)"));
+		o.default = "";
+		o.depends("force_http1", "");
+
+		o = s.option(form.ListValue, "force_ipv6_resolvers", _("Use IPv6 resolvers"));
 		o.modalonly = true;
 		o.optional = true;
 		o.rmempty = true;
