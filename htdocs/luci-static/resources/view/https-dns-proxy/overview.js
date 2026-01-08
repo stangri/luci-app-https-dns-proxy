@@ -209,13 +209,6 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = "30";
 
-		o = s.taboption("service", form.ListValue, "verbosity", _("Verbosity"));
-		o.optional = true;
-		o.value("0", _("Minimal output/logging"));
-		o.value("1", _("Normal output/logging"));
-		o.value("2", _("Extra output/logging"));
-		o.default = "1";
-
 		o = s.taboption(
 			"global",
 			form.ListValue,
@@ -251,6 +244,15 @@ return view.extend({
 		o.rmempty = true;
 		o.value("", _("Use any family DNS resolvers"));
 		o.value("1", _("Force use of IPv6 DNS resolvers"));
+		o.default = "";
+
+		o = s.taboption("global", form.ListValue, "verbosity", _("Logging Verbosity Level"));
+		o.optional = true;
+		o.value("", _("0: Fatal"));
+		o.value("1", _("1: Error"));
+		o.value("2", _("2: Warning"));
+		o.value("3", _("3: Info"));
+		o.value("4", _("4: Debug"));
 		o.default = "";
 
 		o = s.taboption("global", form.Value, "listen_addr", _("Listen Address"));
@@ -538,15 +540,29 @@ return view.extend({
 		o.datatype = "ipaddr('nomask')";
 		o.optional = true;
 		o.placeholder = "127.0.0.1";
+		o.textvalue = function (section_id) {
+			var value = this.cfgvalue(section_id);
+			if (value) return value;
+			var globalValue = this.map.data.get(this.map.config, "config", "listen_addr");
+			return globalValue || this.placeholder || _("auto");
+		};
 
 		o = s.option(form.Value, "listen_port", _("Listen Port"));
 		o.datatype = "port";
 		o.optional = true;
 		o.placeholder = "5053";
+		o.textvalue = function (section_id) {
+			var value = this.cfgvalue(section_id);
+			return value || _("auto");
+		};
 
 		o = s.option(form.Value, "source_addr", _("Source (Bind To) Address"));
 		o.datatype = "ipaddr('nomask')";
 		o.optional = true;
+		o.textvalue = function (section_id) {
+			var value = this.cfgvalue(section_id);
+			return value || _("*");
+		};
 
 		o = s.option(form.Value, "user", _("Run As User"));
 		o.modalonly = true;
@@ -563,11 +579,15 @@ return view.extend({
 		o.modalonly = true;
 		o.optional = true;
 
-		o = s.option(form.Value, "verbosity", _("Logging Verbosity"));
-		o.datatype = "range(0,4)";
+		o = s.option(form.ListValue, "verbosity", _("Logging Verbosity Level"));
 		o.modalonly = true;
 		o.optional = true;
-		o.placeholder = "1";
+		o.value("", _("0: Fatal"));
+		o.value("1", _("1: Error"));
+		o.value("2", _("2: Warning"));
+		o.value("3", _("3: Info"));
+		o.value("4", _("4: Debug"));
+		o.default = "";
 
 		o = s.option(form.Value, "logfile", _("Logging File Path"));
 		o.modalonly = true;
