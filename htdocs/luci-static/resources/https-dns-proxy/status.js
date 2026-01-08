@@ -30,22 +30,22 @@ var pkg = {
 			pkg.Name +
 			"/" +
 			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "") +
-			"#Donate"
+			"#donate"
 		);
 	},
 	templateToRegexp: function (template) {
 		if (template)
 			return new RegExp(
 				"^" +
-					template
-						.split(/(\{\w+\})/g)
-						.map((part) => {
-							let placeholder = part.match(/^\{(\w+)\}$/);
-							if (placeholder) return `(?<${placeholder[1]}>.*?)`;
-							else return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-						})
-						.join("") +
-					"$"
+				template
+					.split(/(\{\w+\})/g)
+					.map((part) => {
+						let placeholder = part.match(/^\{(\w+)\}$/);
+						if (placeholder) return `(?<${placeholder[1]}>.*?)`;
+						else return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+					})
+					.join("") +
+				"$"
 			);
 		return new RegExp("");
 	},
@@ -228,8 +228,8 @@ var status = baseclass.extend({
 				);
 				text = _("See the %sREADME%s for details.").format(
 					'<a href="' +
-						pkg.URL +
-						'#a-word-about-default-routing " target="_blank">',
+					pkg.URL +
+					'#a-word-about-default-routing " target="_blank">',
 					"</a>"
 				);
 				var instancesDescr = E("div", { class: "cbi-value-description" }, "");
