@@ -112,8 +112,6 @@ get_providers() {
 	echo ']}'
 }
 
-get_runtime() { ubus call service list "{ 'verbose': true, 'name': '$1' }"; }
-
 set_init_action() {
 	local name="$1" action="$2" cmd
 	case $action in
@@ -141,9 +139,6 @@ case "$1" in
 			json_add_string 'name' 'name'
 		json_close_object
 		json_add_object "getProviders"
-			json_add_string 'name' "name"
-		json_close_object
-		json_add_object "getRuntime"
 			json_add_string 'name' "name"
 		json_close_object
 		json_add_object "setInitAction"
@@ -182,13 +177,6 @@ case "$1" in
 				json_get_var name "name"
 				json_cleanup
 				get_providers "$name"
-				;;
-			getRuntime)
-				read -r input
-				json_load "$input"
-				json_get_var name "name"
-				json_cleanup
-				get_runtime "$name"
 				;;
 			setInitAction)
 				read -r input
