@@ -113,6 +113,17 @@ get_providers() {
 
 set_init_action() {
 	local name="$1" action="$2" cmd
+	
+	# SECURITY FIX: Validate name parameter to prevent command injection
+	# CVE-202X-XXXXX: Privilege Escalation via unsanitized 'name' parameter
+	# Fix by: Ahmet Mersin (ahmetmersin.com)
+	# Only allow the expected package name
+	if [ "$name" != "$packageName" ]; then
+		logger "SECURITY: Rejected invalid name parameter: $name"
+		print_json_bool "result" '0'
+		return 1
+	fi
+	
 	case $action in
 		enable|disable|start|stop|restart)
 			cmd="/etc/init.d/${name} ${action}"
