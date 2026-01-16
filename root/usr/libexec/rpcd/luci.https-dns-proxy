@@ -9,7 +9,6 @@
 # ubus -S call luci.https-dns-proxy getInitStatus '{"name": "https-dns-proxy" }'
 # ubus -S call luci.https-dns-proxy getPlatformSupport '{"name": "https-dns-proxy" }'
 # ubus -S call luci.https-dns-proxy getProviders '{"name": "https-dns-proxy" }'
-# ubus -S call luci.https-dns-proxy getRuntime '{"name": "https-dns-proxy" }'
 
 readonly packageName="https-dns-proxy"
 readonly providersDir="/usr/share/${packageName}/providers"
